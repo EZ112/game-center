@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PaymentActivity">
+
+    <TextView
+        android:id="@+id/paymentHead"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="Payment Confirmation"
+        android:textSize="20dp"/>
+
+    <ImageView
+        android:id="@+id/gameImg"
+        android:layout_width="80dp"
+        android:layout_height="125dp"
+        android:layout_marginLeft="35dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:scaleType="centerCrop"
+        android:layout_below="@id/paymentHead"/>
+    <TextView
+        android:id="@+id/gameName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="Game Name"
+        android:textSize="20dp"
+        android:layout_toRightOf="@id/gameImg"
+        android:layout_below="@id/paymentHead"/>
+    <RatingBar
+        android:id="@+id/gameRating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Base.Widget.AppCompat.RatingBar.Small"
+        android:theme="@style/RatingBar"
+        android:rating="4.5"
+        android:layout_toRightOf="@+id/gameImg"
+        android:layout_below="@id/gameName"/>
+    <TextView
+        android:id="@+id/stockLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stock "
+        android:layout_toRightOf="@id/gameImg"
+        android:layout_below="@id/gameRating"/>
+    <TextView
+        android:id="@+id/gameStock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00"
+        android:layout_toRightOf="@id/stockLabel"
+        android:layout_below="@id/gameRating"/>
+    <TextView
+        android:id="@+id/gameGenre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Genre"
+        android:layout_toRightOf="@id/gameImg"
+        android:layout_below="@id/stockLabel"/>
+    <TextView
+        android:id="@+id/priceLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="35dp"
+        android:text="Price "
+        android:layout_below="@id/gameImg"/>
+    <TextView
+        android:id="@+id/gamePrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rp 000.000,00"
+        android:textSize="20dp"
+        android:layout_toRightOf="@id/moneyLabel"
+        android:layout_below="@id/gameImg"/>
+    <TextView
+        android:id="@+id/moneyLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="35dp"
+        android:layout_marginRight="15dp"
+        android:text="Input Money"
+        android:gravity="center"
+        android:layout_below="@id/gamePrice" />
+    <EditText
+        android:id="@+id/moneyIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="125dp"
+        android:textSize="20dp"
+        android:inputType="number"
+        android:layout_toRightOf="@id/moneyLabel"
+        android:layout_below="@id/gamePrice" />
+    <TextView
+        android:id="@+id/payBtn"
+        android:layout_width="120dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="35dp"
+        android:text="Pay"
+        android:gravity="center"
+        android:textColor="@color/colorWhite"
+        android:background="@drawable/button"
+        android:layout_below="@id/moneyIn"/>
+
+</RelativeLayout>

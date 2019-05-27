@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:theme="@style/AppTheme.NoActionBar">
+
+    <ImageView
+        android:id="@+id/gameImg"
+        android:layout_width="95dp"
+        android:layout_height="140dp"
+        android:layout_marginRight="10dp"
+        android:scaleType="centerCrop"/>
+    <TextView
+        android:id="@+id/gameName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="Game Name"
+        android:textSize="20dp"
+        android:layout_toRightOf="@id/gameImg"/>
+    <TextView
+        android:id="@+id/playHourLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Playing Hour "
+        android:layout_toRightOf="@id/gameImg"
+        android:layout_below="@id/gameName"/>
+    <TextView
+        android:id="@+id/gamePlayHour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00:00:00"
+        android:layout_toRightOf="@id/playHourLabel"
+        android:layout_below="@id/gameName"/>
+    <TextView
+        android:id="@+id/gameGenre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Genre"
+        android:layout_toRightOf="@id/gameImg"
+        android:layout_below="@id/gamePlayHour"/>
+    <TextView
+        android:id="@+id/gameDesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Desc"
+        android:layout_toRightOf="@id/gameImg"
+        android:layout_below="@id/gameGenre"/>
+
+    <TextView
+        android:id="@+id/playBtn"
+        android:layout_width="120dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="5dp"
+        android:text="Play"
+        android:gravity="center"
+        android:textColor="@color/colorWhite"
+        android:background="@drawable/button"
+        android:layout_toRightOf="@id/gameImg"
+        android:layout_below="@id/gameDesc"/>
+
+</RelativeLayout>
