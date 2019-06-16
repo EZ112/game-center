@@ -1,9 +1,7 @@
 package com.example.gamecenterasg;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Typeface;
-import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,34 +14,25 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gamecenterasg.Model.Games;
-import com.example.gamecenterasg.Model.MyGames;
 import com.example.gamecenterasg.Model.Users;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.Locale;
 
 public class PaymentActivity extends AppCompatActivity {
 
+    DatabaseHelper gameCenterDB;
     ImageView gameImg;
     TextView paymentHead, gameName, gameStock, gamePrice, gameGenre, payBtn;
+    RatingBar gameRating;
     EditText moneyIn;
     Users user;
     Games game;
-
-    ArrayList<MyGames> myGamesList = new ArrayList<>();
-
-    SharedPreferences appSP;
-    SharedPreferences.Editor prefEditor;
-    Gson gson = new Gson();
-    String json;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,20 +47,10 @@ public class PaymentActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(s);
 
-        appSP = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        prefEditor = appSP.edit();
+        user = HomeActivity.user;
+        game = GamesActivity.game;
 
-        json = appSP.getString("loggedInUser","");
-        if(appSP.contains("loggedInUser"))
-            user = gson.fromJson(json, Users.class);
-
-        json = appSP.getString("currGameSP","");
-        if(appSP.contains("currGameSP"))
-            game = gson.fromJson(json, Games.class);
-
-        json = appSP.getString("myGameListSP","");
-        if(appSP.contains("myGameListSP"))
-            myGamesList = gson.fromJson(json, new TypeToken<ArrayList<MyGames>>(){}.getType());
+        gameCenterDB = new DatabaseHelper(this);
 
         paymentHead = findViewById(R.id.paymentHead);
 
@@ -82,6 +61,7 @@ public class PaymentActivity extends AppCompatActivity {
         gameStock = findViewById(R.id.gameStock);
         gamePrice = findViewById(R.id.gamePrice);
         gameGenre = findViewById(R.id.gameGenre);
+        gameRating = findViewById(R.id.gameRating);
         payBtn = findViewById(R.id.payBtn);
 
         String moneyFormat = NumberFormat.getNumberInstance(Locale.US).format(game.getGamePrice());
@@ -91,6 +71,7 @@ public class PaymentActivity extends AppCompatActivity {
         gameStock.setText(String.valueOf(game.getGameStock()));
         gamePrice.setText("Rp " + moneyFormat + ".00");
         gameGenre.setText(game.getGameGenre());
+        gameRating.setRating((float) game.getGameRating());
 
         moneyIn = findViewById(R.id.moneyIn);
 
@@ -128,12 +109,7 @@ public class PaymentActivity extends AppCompatActivity {
                     change = in - price;
 
                     if(change >= 0){
-                        myGamesList.add(new MyGames(myGamesList.size()+1, "00:00:00", game, user));
-
-                        json = gson.toJson(myGamesList);
-                        prefEditor.putString("myGameListSP", json);
-                        prefEditor.apply();
-//                        Log.i("myGameList : ", json);
+                          gameCenterDB.addMyGame("00:00:00", game.getGameID(), user.getUserID());
 
                         Toast.makeText(PaymentActivity.this, "Your change is Rp "+String.valueOf(change),Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(PaymentActivity.this, HomeActivity.class);

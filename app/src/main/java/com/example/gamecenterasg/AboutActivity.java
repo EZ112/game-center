@@ -8,9 +8,18 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.widget.TextView;
 
-public class AboutActivity extends AppCompatActivity {
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+public class AboutActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     TextView aboutHead, companyLocationHead;
+
+    private GoogleMap map;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +39,23 @@ public class AboutActivity extends AppCompatActivity {
 
         aboutHead.setTypeface(robotoThin);
         companyLocationHead.setTypeface(robotoThin);
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        map = googleMap;
+
+        LatLng companyLocation = new LatLng(-6.2178652, 106.7335872);
+        map.addMarker(new MarkerOptions().position(companyLocation).title("Company Location"));
+
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(companyLocation, 15));
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
 }

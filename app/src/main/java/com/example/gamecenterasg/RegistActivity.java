@@ -2,9 +2,7 @@ package com.example.gamecenterasg;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Typeface;
-import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,18 +19,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.gamecenterasg.Model.Users;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Random;
 
 public class RegistActivity extends AppCompatActivity {
 
+    DatabaseHelper gameCenterDB;
     EditText nameIn, emaliIn, phoneIn, passIn, passConfIn, birthIn;
     Calendar calendar;
     DatePickerDialog pickerDialog;
@@ -40,13 +34,6 @@ public class RegistActivity extends AppCompatActivity {
     RadioButton rbMale, rbFemale;
     Spinner statusIn;
     TextView genderLabel, statusLabel, registBtn;
-
-    ArrayList<Users> users = new ArrayList<>();
-
-    SharedPreferences appSP;
-    SharedPreferences.Editor prefEditor;
-    Gson gson = new Gson();
-    String json;
 
     String userName, userEmail, userPassword, userPasswordConf, userBirthday, userPhone, userGender, userStatus;
     int userBalance = 1000000;
@@ -56,14 +43,7 @@ public class RegistActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_regist);
 
-        appSP = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        prefEditor = appSP.edit();
-
-        json = appSP.getString("usersSP","");
-
-        if(appSP.contains("usersSP"))
-            users = gson.fromJson(json, new TypeToken<ArrayList<Users>>(){}.getType());
-
+        gameCenterDB = new DatabaseHelper(this);
 
         Typeface robotoLight = Typeface.createFromAsset(getAssets(), "fonts/roboto/Roboto-Light.ttf");
 
@@ -145,12 +125,7 @@ public class RegistActivity extends AppCompatActivity {
                 userBalance = 1000000;
 
                 if(validation()){
-                    users.add(new Users(genUserID(), userName, userEmail, userPassword, userBirthday, userPhone, userGender, userBalance, userStatus));
-
-                    json = gson.toJson(users);
-                    prefEditor.putString("usersSP", json);
-                    prefEditor.apply();
-
+                    gameCenterDB.addUser(genUserID(), userName, userEmail, userPassword, userBirthday, userPhone, userGender, userBalance, userStatus);
 //                    Log.i("Users", json);
 
                     Intent intent = new Intent(RegistActivity.this, LoginActivity.class);

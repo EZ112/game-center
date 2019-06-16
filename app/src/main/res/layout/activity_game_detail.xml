@@ -25,13 +25,19 @@
         android:text="Game Name"
         android:textSize="20dp"
         android:layout_toRightOf="@id/gameImg"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        ></LinearLayout>
     <RatingBar
         android:id="@+id/gameRating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/Base.Widget.AppCompat.RatingBar.Small"
         android:theme="@style/RatingBar"
-        android:rating="4.5"
+        android:numStars="5"
+        android:rating="0.0"
+        android:stepSize="0.1"
         android:layout_toRightOf="@+id/gameImg"
         android:layout_below="@id/gameName"/>
     <TextView

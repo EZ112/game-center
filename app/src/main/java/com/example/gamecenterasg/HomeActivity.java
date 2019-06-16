@@ -1,13 +1,8 @@
 package com.example.gamecenterasg;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.ActionBar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.util.Log;
@@ -20,37 +15,28 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gamecenterasg.Adapter.MyGamesAdapter;
-import com.example.gamecenterasg.Model.Games;
 import com.example.gamecenterasg.Model.MyGames;
 import com.example.gamecenterasg.Model.Users;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 
 public class HomeActivity extends AppCompatActivity
     implements NavigationView.OnNavigationItemSelectedListener {
 
+    DatabaseHelper gameCenterDB;
     TextView profileHead, username, email, phone, myGamesHead, myGamesEmpty;
     MyGamesAdapter myGamesAdapter;
     ListView myGamesView;
     Intent intent;
+    String userID;
 
-    Users user;
-
-    ArrayList<MyGames> allMyGamesList = new ArrayList<>();
-    ArrayList<MyGames> myGamesList = new ArrayList<>();
-
-    SharedPreferences appSP;
-    SharedPreferences.Editor prefEditor;
-    Gson gson = new Gson();
-    String json;
+    static Users user;
+    static ArrayList<MyGames> myGamesList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,15 +62,14 @@ public class HomeActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        intent = getIntent();
 
-        appSP = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        prefEditor = appSP.edit();
-        json = appSP.getString("loggedInUser","");
-        user = gson.fromJson(json, Users.class);
+        userID = LoginActivity.userID;
 
-        json = appSP.getString("myGameListSP","");
-        if(appSP.contains("myGameListSP"))
-            allMyGamesList = gson.fromJson(json, new TypeToken<ArrayList<MyGames>>(){}.getType());
+        gameCenterDB = new DatabaseHelper(this);
+        user = gameCenterDB.getUser(userID);
+        myGamesList = gameCenterDB.viewMyGame(userID);
+
 
         View headerView = navigationView.getHeaderView(0);
         TextView navUser = headerView.findViewById(R.id.navUser);
@@ -113,29 +98,14 @@ public class HomeActivity extends AppCompatActivity
 
         myGamesHead.setTypeface(robotoThin);
 
-        if(!allMyGamesList.isEmpty()){
+        if(!myGamesList.isEmpty()){
+            myGamesEmpty.setVisibility(View.GONE);
+            myGamesView.setVisibility(View.VISIBLE);
 
-            for(MyGames myGames : allMyGamesList){
-                if(myGames.getUsers().getUserID().equals(user.getUserID()))
-                    myGamesList.add(myGames);
-            }
+            myGamesAdapter = new MyGamesAdapter(getApplicationContext(), myGamesList);
 
-            if(!myGamesList.isEmpty()){
-                myGamesEmpty.setVisibility(View.GONE);
-                myGamesView.setVisibility(View.VISIBLE);
-
-                myGamesAdapter = new MyGamesAdapter(getApplicationContext(), myGamesList);
-
-                myGamesView = findViewById(R.id.myGamesView);
-                myGamesView.setAdapter(myGamesAdapter);
-
-                myGamesView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        Toast.makeText(HomeActivity.this, myGamesList.get(i).getGames().getGameName(), Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
+            myGamesView = findViewById(R.id.myGamesView);
+            myGamesView.setAdapter(myGamesAdapter);
         }
 
 
@@ -169,7 +139,8 @@ public class HomeActivity extends AppCompatActivity
         if (id == R.id.about_us) {
             intent = new Intent(HomeActivity.this, AboutActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
+            intent.putExtra("userID", user.getUserID());
+            startActivityForResult(intent, 1);
         }
 
         return super.onOptionsItemSelected(item);
@@ -187,14 +158,11 @@ public class HomeActivity extends AppCompatActivity
             case R.id.navGames:
                 intent = new Intent(HomeActivity.this, GamesActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("userID", user.getUserID());
                 startActivity(intent);
                 finish();
                 break;
             case R.id.navLogout:
-                prefEditor.remove("gamesSP");
-                prefEditor.remove("currGameSP");
-                prefEditor.remove("loggedInUser");
-                prefEditor.apply();
                 intent = new Intent(HomeActivity.this, LoginActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);

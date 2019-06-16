@@ -1,30 +1,20 @@
 package com.example.gamecenterasg;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Typeface;
-import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.gamecenterasg.Model.Games;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.io.FileInputStream;
-import java.io.Serializable;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.Locale;
 
 public class GameDetailActivity extends AppCompatActivity {
@@ -34,11 +24,6 @@ public class GameDetailActivity extends AppCompatActivity {
     RatingBar gameRating;
 
     Games game;
-
-    SharedPreferences appSP;
-    SharedPreferences.Editor prefEditor;
-    Gson gson = new Gson();
-    String json;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,13 +38,7 @@ public class GameDetailActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(s);
 
-        appSP = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        prefEditor = appSP.edit();
-
-        json = appSP.getString("currGameSP","");
-
-        if(appSP.contains("currGameSP"))
-            game = gson.fromJson(json, Games.class);
+        game = GamesActivity.game;
 
         gameImg = findViewById(R.id.gameImg);
         gameName = findViewById(R.id.gameName);
@@ -85,7 +64,7 @@ public class GameDetailActivity extends AppCompatActivity {
         gamePrice.setText("Rp " + moneyFormat + ".00");
         gameGenre.setText(game.getGameGenre());
         gameDesc.setText(game.getGameDesc());
-        gameRating.setRating(game.getGameRating());
+        gameRating.setRating((float) game.getGameRating());
 
         buyBtn.setOnClickListener(new View.OnClickListener() {
             @Override

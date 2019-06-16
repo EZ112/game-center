@@ -60,7 +60,7 @@ public class GamesAdapter extends BaseAdapter {
 
 
         gameName.setText(gamesList.get(i).getGameName());
-        gameRating.setRating(gamesList.get(i).getGameRating());
+        gameRating.setRating((float) gamesList.get(i).getGameRating());
         gameGenre.setText(gamesList.get(i).getGameGenre());
         gameDesc.setText(gamesList.get(i).getGameDesc().substring(0,85) + "...");
         gameImg.setImageResource(gamesList.get(i).getGameImages());

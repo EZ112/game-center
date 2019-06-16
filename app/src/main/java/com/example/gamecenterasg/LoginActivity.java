@@ -1,9 +1,7 @@
 package com.example.gamecenterasg;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Typeface;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,23 +9,13 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.gamecenterasg.Model.Users;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.util.ArrayList;
-import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
+    DatabaseHelper gameCenterDB;
     TextView appName, emailIn, passIn, loginBtn, regText, regLink;
 
-    ArrayList<Users> users = new ArrayList<>();
-
-    SharedPreferences appSP;
-    SharedPreferences.Editor prefEditor;
-    Gson gson = new Gson();
-    String json;
+    static String userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,10 +23,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        appSP = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        prefEditor = appSP.edit();
-        json = appSP.getString("usersSP","");
-        users = gson.fromJson(json, new TypeToken<ArrayList<Users>>(){}.getType());
+        gameCenterDB = new DatabaseHelper(this);
 
         Typeface robotoLight = Typeface.createFromAsset(getAssets(), "fonts/roboto/Roboto-Light.ttf");
         Typeface robotoThin = Typeface.createFromAsset(getAssets(), "fonts/roboto/Roboto-Thin.ttf");
@@ -62,20 +47,18 @@ public class LoginActivity extends AppCompatActivity {
                 if(isEmpty())
                     Toast.makeText(LoginActivity.this, "Username and Password Cannot be Empty", Toast.LENGTH_LONG).show();
                 else{
-                    if(validation()!=null){
-                        Users user = validation();
-
-                        json = gson.toJson(user);
-                        prefEditor.putString("loggedInUser", json);
-                        prefEditor.apply();
-
+                    String emailInStr = emailIn.getText().toString();
+                    String passInStr = passIn.getText().toString();
+                    userID = gameCenterDB.loginUser(emailInStr, passInStr);
+                    if(!userID.equals("")){
                         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                         finish();
                     }
-                    else
+                    else{
                         Toast.makeText(LoginActivity.this, "Wrong Username or Password", Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         });
@@ -96,18 +79,5 @@ public class LoginActivity extends AppCompatActivity {
             return true;
         else
             return false;
-    }
-
-    private Users validation(){
-        if(users != null){
-            for(Users user : users){
-                String emailInStr = emailIn.getText().toString();
-                String passInStr = passIn.getText().toString();
-                if(user.getUserEmail().equals(emailInStr) && user.getUserPassword().equals(passInStr)){
-                    return user;
-                }
-            }
-        }
-        return null;
     }
 }

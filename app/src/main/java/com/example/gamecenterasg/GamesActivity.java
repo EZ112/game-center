@@ -1,8 +1,6 @@
 package com.example.gamecenterasg;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -12,7 +10,6 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,32 +18,36 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.gamecenterasg.Adapter.GamesAdapter;
 import com.example.gamecenterasg.Model.Games;
+import com.example.gamecenterasg.Model.MyGames;
 import com.example.gamecenterasg.Model.Users;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 public class GamesActivity extends AppCompatActivity
     implements NavigationView.OnNavigationItemSelectedListener{
 
+    DatabaseHelper gameCenterDB;
     ListView gamesView;
     GamesAdapter gamesAdapter;
     ArrayList<Games> gamesList = new ArrayList<>();
+    ArrayList<Integer> gameImages = new ArrayList<>();
     Intent intent;
 
     Users user;
-
-    ArrayList<String> gameNames, gameDescs, gameGenres;
-    ArrayList<Float> gameRatings;
-    ArrayList<Integer> gameStocks, gamePrices, gameImages;
-
-    SharedPreferences appSP;
-    SharedPreferences.Editor prefEditor;
-    Gson gson = new Gson();
-    String json;
+    static Games game;
+    ArrayList<MyGames> myGamesList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,11 +70,8 @@ public class GamesActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        appSP = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        prefEditor = appSP.edit();
-
-        json = appSP.getString("loggedInUser","");
-        user = gson.fromJson(json, Users.class);
+        user = HomeActivity.user;
+        myGamesList = HomeActivity.myGamesList;
 
         View headerView = navigationView.getHeaderView(0);
         TextView navUser = headerView.findViewById(R.id.navUser);
@@ -82,126 +80,81 @@ public class GamesActivity extends AppCompatActivity
         navUser.setText(user.getUserName());
         navEmail.setText(user.getUserEmail());
 
-        json = appSP.getString("gamesSP","");
+        gameCenterDB = new DatabaseHelper(this);
+        gamesList = gameCenterDB.viewGame();
+        gamesView = findViewById(R.id.gamesView);
 
-//        Log.i("games",json);
-
-        if(appSP.contains("gamesSP"))
-            gamesList = gson.fromJson(json, new TypeToken<ArrayList<Games>>(){}.getType());
-        else {
-            gameNames = new ArrayList<>();
-            gameDescs = new ArrayList<>();
-            gameGenres = new ArrayList<>();
-            gameRatings = new ArrayList<>();
-            gameStocks = new ArrayList<>();
-            gamePrices = new ArrayList<>();
-            gameImages = new ArrayList<>();
-
-            gameNames.add("Nier: Automata");
-            gameDescs.add("Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore, tempore aliquam? Veritatis, vitae reiciendis consectetur, corrupti laudantium inventore.");
-            gameGenres.add("Action, JRPG");
-            gameRatings.add(4.5f);
-            gameStocks.add(92);
-            gamePrices.add(350000);
+        if(gamesList.isEmpty()){
             gameImages.add(R.drawable.game1);
-
-            gameNames.add("Final Fantasy XV");
-            gameDescs.add("Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore, tempore aliquam? Veritatis, vitae reiciendis consectetur, corrupti laudantium inventore.");
-            gameGenres.add("Action, JRPG");
-            gameRatings.add(3.5f);
-            gameStocks.add(84);
-            gamePrices.add(250000);
             gameImages.add(R.drawable.game2);
-
-            gameNames.add("Steins; Gate 0");
-            gameDescs.add("Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore, tempore aliquam? Veritatis, vitae reiciendis consectetur, corrupti laudantium inventore.");
-            gameGenres.add("Light Novel");
-            gameRatings.add(5.0f);
-            gameStocks.add(73);
-            gamePrices.add(250000);
             gameImages.add(R.drawable.game3);
-
-            gameNames.add("Devil May Cry 5");
-            gameDescs.add("Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore, tempore aliquam? Veritatis, vitae reiciendis consectetur, corrupti laudantium inventore.");
-            gameGenres.add("Action, JRPG");
-            gameRatings.add(4.0f);
-            gameStocks.add(36);
-            gamePrices.add(250000);
             gameImages.add(R.drawable.game4);
-
-            gameNames.add("Battlefield V");
-            gameDescs.add("Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore, tempore aliquam? Veritatis, vitae reiciendis consectetur, corrupti laudantium inventore.");
-            gameGenres.add("Action, FPS");
-            gameRatings.add(4.5f);
-            gameStocks.add(36);
-            gamePrices.add(550000);
             gameImages.add(R.drawable.game5);
-
-            gameNames.add("Assassins Creed Rogue");
-            gameDescs.add("Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore, tempore aliquam? Veritatis, vitae reiciendis consectetur, corrupti laudantium inventore.");
-            gameGenres.add("Action, RPG");
-            gameRatings.add(3.5f);
-            gameStocks.add(41);
-            gamePrices.add(620000);
             gameImages.add(R.drawable.game6);
-
-            gameNames.add("Anthem");
-            gameDescs.add("Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore, tempore aliquam? Veritatis, vitae reiciendis consectetur, corrupti laudantium inventore.");
-            gameGenres.add("Action, TPS");
-            gameRatings.add(5f);
-            gameStocks.add(50);
-            gamePrices.add(700000);
             gameImages.add(R.drawable.game7);
-
-            gameNames.add("Civilization VI");
-            gameDescs.add("Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore, tempore aliquam? Veritatis, vitae reiciendis consectetur, corrupti laudantium inventore.");
-            gameGenres.add("Strategy");
-            gameRatings.add(4.5f);
-            gameStocks.add(89);
-            gamePrices.add(320000);
             gameImages.add(R.drawable.game8);
-
-            gameNames.add("Call of Cthulhu");
-            gameDescs.add("Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore, tempore aliquam? Veritatis, vitae reiciendis consectetur, corrupti laudantium inventore.");
-            gameGenres.add("Thriller");
-            gameRatings.add(5f);
-            gameStocks.add(43);
-            gamePrices.add(620000);
             gameImages.add(R.drawable.game9);
-
-            gameNames.add("Star Wars Battlefront II");
-            gameDescs.add("Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore, tempore aliquam? Veritatis, vitae reiciendis consectetur, corrupti laudantium inventore.");
-            gameGenres.add("Action, FPS");
-            gameRatings.add(3.5f);
-            gameStocks.add(54);
-            gamePrices.add(280000);
             gameImages.add(R.drawable.game10);
 
-            for (int i = 0; i < gameNames.size(); i++) {
-                gamesList.add(new Games(i+1, gameNames.get(i), gameDescs.get(i), gameGenres.get(i), gameRatings.get(i), gameStocks.get(i), gamePrices.get(i), gameImages.get(i), null));
-            }
+            RequestQueue reqQue = Volley.newRequestQueue(this);
+            final String jsonUrl = "https://api.myjson.com/bins/15cfg8";
 
-            json = gson.toJson(gamesList);
+            JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, jsonUrl, null, new Response.Listener<JSONArray>() {
+                @Override
+                public void onResponse(JSONArray response) {
+                    for (int i = 0; i < response.length(); i++){
+                        try {
+                            JSONObject jsonObject = response.getJSONObject(i);
+                            String id = jsonObject.getString("id");
+                            String name = jsonObject.getString("name");
+                            long price = jsonObject.getLong("price");
+                            int stock = jsonObject.getInt("stock");
+                            double rating = jsonObject.getDouble("rating");
+                            String genre = jsonObject.getString("genre");
+                            String desc = jsonObject.getString("description");
 
-//            Log.i("Game Init : ",json);
-            prefEditor.putString("gamesSP", json);
-            prefEditor.apply();
+                            gameCenterDB.addGame(id, name, price, stock, rating, genre, desc, gameImages.get(i));
+                            gamesList = gameCenterDB.viewGame();
+                            gamesAdapter = new GamesAdapter(getApplicationContext(), gamesList);
+                            gamesView.setAdapter(gamesAdapter);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            });
+            reqQue.add(jsonArrayRequest);
+
+        }
+        else{
+            gamesAdapter = new GamesAdapter(getApplicationContext(), gamesList);
+            gamesView.setAdapter(gamesAdapter);
         }
 
-        gamesAdapter = new GamesAdapter(getApplicationContext(), gamesList);
-
-        gamesView = findViewById(R.id.gamesView);
-        gamesView.setAdapter(gamesAdapter);
         gamesView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                json = gson.toJson(gamesList.get(i));
-                prefEditor.putString("currGameSP", json);
-                prefEditor.apply();
+                boolean isPurchased = false;
 
-                Intent intent = new Intent(GamesActivity.this, GameDetailActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+                for(MyGames myGame : myGamesList){
+                    if(myGame.getGameID().equals(gamesList.get(i).getGameID())){
+                        isPurchased = true;
+                    }
+                }
+                if(isPurchased){
+                    Toast.makeText(getApplicationContext(), "This game is already been purchased", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    game = gamesList.get(i);
+                    Intent intent = new Intent(GamesActivity.this, GameDetailActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -255,10 +208,6 @@ public class GamesActivity extends AppCompatActivity
             case R.id.navGames:
                 break;
             case R.id.navLogout:
-                prefEditor.remove("gamesSP");
-                prefEditor.remove("currGameSP");
-                prefEditor.remove("loggedInUser");
-                prefEditor.apply();
                 intent = new Intent(GamesActivity.this, LoginActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);

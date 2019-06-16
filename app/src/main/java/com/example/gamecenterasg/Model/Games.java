@@ -4,61 +4,87 @@ import java.io.Serializable;
 import java.util.Vector;
 
 public class Games {
-    private int gameID;
+    private String gameID;
     private String gameName;
-    private String gameDesc;
-    private String gameGenre;
-    private float gameRating;
-    private int gameStock;
     private long gamePrice;
+    private int gameStock;
+    private double gameRating;
+    private String gameGenre;
+    private String gameDesc;
     private int gameImages;
-    private Vector<String> MyGamesID;
 
-    public Games(int gameID, String gameName, String gameDesc, String gameGenre, float gameRating, int gameStock, long gamePrice, int gameImages, Vector<String> myGamesID) {
+    public Games(String gameID, String gameName, long gamePrice, int gameStock, double gameRating, String gameGenre, String gameDesc, int gameImages) {
         this.gameID = gameID;
         this.gameName = gameName;
-        this.gameDesc = gameDesc;
-        this.gameGenre = gameGenre;
-        this.gameRating = gameRating;
-        this.gameStock = gameStock;
         this.gamePrice = gamePrice;
+        this.gameStock = gameStock;
+        this.gameRating = gameRating;
+        this.gameGenre = gameGenre;
+        this.gameDesc = gameDesc;
         this.gameImages = gameImages;
-        MyGamesID = myGamesID;
     }
 
-    public int getGameID() {
+    public String getGameID() {
         return gameID;
+    }
+
+    public void setGameID(String gameID) {
+        this.gameID = gameID;
     }
 
     public String getGameName() {
         return gameName;
     }
 
-    public String getGameDesc() {
-        return gameDesc;
-    }
-
-    public String getGameGenre() {
-        return gameGenre;
-    }
-
-    public float getGameRating() {
-        return gameRating;
-    }
-
-    public int getGameStock() {
-        return gameStock;
+    public void setGameName(String gameName) {
+        this.gameName = gameName;
     }
 
     public long getGamePrice() {
         return gamePrice;
     }
 
+    public void setGamePrice(long gamePrice) {
+        this.gamePrice = gamePrice;
+    }
+
+    public int getGameStock() {
+        return gameStock;
+    }
+
+    public void setGameStock(int gameStock) {
+        this.gameStock = gameStock;
+    }
+
+    public double getGameRating() {
+        return gameRating;
+    }
+
+    public void setGameRating(double gameRating) {
+        this.gameRating = gameRating;
+    }
+
+    public String getGameGenre() {
+        return gameGenre;
+    }
+
+    public void setGameGenre(String gameGenre) {
+        this.gameGenre = gameGenre;
+    }
+
+    public String getGameDesc() {
+        return gameDesc;
+    }
+
+    public void setGameDesc(String gameDesc) {
+        this.gameDesc = gameDesc;
+    }
+
     public int getGameImages() {
         return gameImages;
     }
 
-    public Vector<String> getMyGamesID() {
-        return MyGamesID;
+    public void setGameImages(int gameImages) {
+        this.gameImages = gameImages;
     }
 }

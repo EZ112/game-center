@@ -1,9 +1,7 @@
 package com.example.gamecenterasg.Adapter;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Typeface;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,31 +10,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.gamecenterasg.DatabaseHelper;
 import com.example.gamecenterasg.Model.MyGames;
-import com.example.gamecenterasg.Model.Users;
 import com.example.gamecenterasg.R;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class MyGamesAdapter extends BaseAdapter {
     private Context ctx;
-    public ArrayList<MyGames> allMyGamesList = new ArrayList<>();
     public ArrayList<MyGames> myGamesList;
-
-    SharedPreferences appSP;
-    SharedPreferences.Editor prefEditor;
-    Gson gson = new Gson();
-    String json;
+    public DatabaseHelper gameCenterDB;
 
     public MyGamesAdapter(Context ctx, ArrayList<MyGames> myGamesList) {
         this.ctx = ctx;
         this.myGamesList = myGamesList;
+        this.gameCenterDB = new DatabaseHelper(ctx);
     }
 
     @Override
@@ -74,39 +63,20 @@ public class MyGamesAdapter extends BaseAdapter {
         gameDesc.setTypeface(robotoLight);
         playBtn.setTypeface(robotoLight);
 
-        gameName.setText(myGamesList.get(i).getGames().getGameName());
+        gameName.setText(myGamesList.get(i).getGameName());
         gamePlayHour.setText(myGamesList.get(i).getPlayingHour());
-        gameGenre.setText(myGamesList.get(i).getGames().getGameGenre());
-        gameDesc.setText(myGamesList.get(i).getGames().getGameDesc().substring(0,60) + "...");
-        gameImg.setImageResource(myGamesList.get(i).getGames().getGameImages());
+        gameGenre.setText(myGamesList.get(i).getGameGenre());
+        gameDesc.setText(myGamesList.get(i).getGameDesc().substring(0,60) + "...");
+        gameImg.setImageResource(myGamesList.get(i).getGameImages());
 
         playBtn.setTag(i);
         playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                appSP = PreferenceManager.getDefaultSharedPreferences(ctx);
-                prefEditor = appSP.edit();
-                json = appSP.getString("myGameListSP","");
-                if(appSP.contains("myGameListSP"))
-                    allMyGamesList = gson.fromJson(json, new TypeToken<ArrayList<MyGames>>(){}.getType());
-
                 int position = (Integer)view.getTag();
-                String playHour = genPlayHour();
-                String userID = myGamesList.get(position).getUsers().getUserID();
-                int myGameID = myGamesList.get(position).getMyGameID();
-
-                for(MyGames myGames : allMyGamesList){
-                    if(myGames.getUsers().getUserID().equals(userID) && myGames.getMyGameID() == myGameID)
-                        myGames.setPlayingHour(playHour);
-                }
-
-                myGamesList.get(position).setPlayingHour(playHour);
-
-                json = gson.toJson(allMyGamesList);
-//                Log.i("PlayHour",json);
-                prefEditor.putString("myGameListSP", json);
-                prefEditor.apply();
-
+                String playingHour = genPlayHour(myGamesList.get(position).getPlayingHour());
+                gameCenterDB.updatePlayingHour(myGamesList.get(position).getMyGameID(), playingHour);
+                myGamesList.get(position).setPlayingHour(playingHour);
                 MyGamesAdapter.this.notifyDataSetChanged();
             }
         });
@@ -114,14 +84,17 @@ public class MyGamesAdapter extends BaseAdapter {
         return v;
     }
 
-    private String genPlayHour(){
+    private String genPlayHour(String currPlayHour){
+        int currHour = Integer.parseInt(currPlayHour.split(":")[0]);
+        int currMinute = Integer.parseInt(currPlayHour.split(":")[1]);
+        int currSecond = Integer.parseInt(currPlayHour.split(":")[2]);
         Random rand = new Random();
         int r1 = (int)rand.nextInt(10)+1;
         int r2 = (int)rand.nextInt(10)+1;
         int r3 = (int)rand.nextInt(10)+1;
-        String num1 = r1<10?"0"+r1:String.valueOf(r1);
-        String num2 = r2<10?"0"+r2:String.valueOf(r2);
-        String num3 = r3<10?"0"+r3:String.valueOf(r3);
+        String num1 = (currHour+r1)<10?"0"+(currHour+r1):String.valueOf(currHour+r1);
+        String num2 = (currMinute+r2)<10?"0"+(currMinute+r2):String.valueOf(currMinute+r2);
+        String num3 = (currSecond+r3)<10?"0"+(currSecond+r3):String.valueOf(currSecond+r3);
 
         return num1 + ":" + num2 + ":" + num3;
     }
