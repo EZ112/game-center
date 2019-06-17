@@ -1,4 +1,4 @@
-package com.example.gamecenterasg;
+package com.example.gamecenter;
 
 import android.content.Intent;
 import android.support.design.widget.NavigationView;
@@ -24,10 +24,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.gamecenterasg.Adapter.GamesAdapter;
-import com.example.gamecenterasg.Model.Games;
-import com.example.gamecenterasg.Model.MyGames;
-import com.example.gamecenterasg.Model.Users;
+import com.example.gamecenter.Adapter.GamesAdapter;
+import com.example.gamecenter.Model.Games;
+import com.example.gamecenter.Model.MyGames;
+import com.example.gamecenter.Model.Users;
+import com.example.gamecenter.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;

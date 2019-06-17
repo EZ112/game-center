@@ -1,4 +1,4 @@
-package com.example.gamecenterasg;
+package com.example.gamecenter;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.gamecenterasg", appContext.getPackageName());
+        assertEquals("com.example.gamecenter", appContext.getPackageName());
     }
 }

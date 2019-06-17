@@ -1,8 +1,7 @@
-package com.example.gamecenterasg.Adapter;
+package com.example.gamecenter.Adapter;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.media.Rating;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -10,10 +9,8 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.example.gamecenterasg.Model.Games;
-import com.example.gamecenterasg.R;
-
-import org.w3c.dom.Text;
+import com.example.gamecenter.Model.Games;
+import com.example.gamecenter.R;
 
 import java.util.List;
 

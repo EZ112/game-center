@@ -1,4 +1,4 @@
-package com.example.gamecenterasg;
+package com.example.gamecenter;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,9 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.gamecenterasg.Model.Games;
-import com.example.gamecenterasg.Model.MyGames;
-import com.example.gamecenterasg.Model.Users;
+import com.example.gamecenter.Model.Games;
+import com.example.gamecenter.Model.MyGames;
+import com.example.gamecenter.Model.Users;
 
 import java.util.ArrayList;
 

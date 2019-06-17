@@ -1,4 +1,4 @@
-package com.example.gamecenterasg;
+package com.example.gamecenter;
 
 import android.content.Context;
 import android.graphics.Paint;

@@ -1,18 +1,16 @@
-package com.example.gamecenterasg.Adapter;
+package com.example.gamecenter.Adapter;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.gamecenterasg.DatabaseHelper;
-import com.example.gamecenterasg.Model.MyGames;
-import com.example.gamecenterasg.R;
+import com.example.gamecenter.DatabaseHelper;
+import com.example.gamecenter.Model.MyGames;
+import com.example.gamecenter.R;
 
 import java.util.ArrayList;
 import java.util.Random;

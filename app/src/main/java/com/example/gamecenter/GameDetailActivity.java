@@ -1,4 +1,4 @@
-package com.example.gamecenterasg;
+package com.example.gamecenter;
 
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -12,7 +12,8 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.example.gamecenterasg.Model.Games;
+import com.example.gamecenter.Model.Games;
+import com.example.gamecenter.R;
 
 import java.text.NumberFormat;
 import java.util.Locale;

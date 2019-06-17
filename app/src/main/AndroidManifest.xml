@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.gamecenterasg">
+    package="com.example.gamecenter">
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
@@ -15,7 +15,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key"/>
         <activity
-            android:name=".LoginActivity"
+            android:name="com.example.gamecenter.LoginActivity"
             android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,8 +24,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RegistActivity"
-            android:parentActivityName=".LoginActivity"
+            android:name="com.example.gamecenter.RegistActivity"
+            android:parentActivityName="com.example.gamecenter.LoginActivity"
             android:windowSoftInputMode="stateAlwaysHidden">
             <!--<intent-filter>-->
                 <!--<action android:name="android.intent.action.MAIN" />-->
@@ -34,7 +34,7 @@
             <!--</intent-filter>-->
         </activity>
         <activity
-            android:name=".HomeActivity"
+            android:name="com.example.gamecenter.HomeActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <!--<intent-filter>-->
                 <!--<action android:name="android.intent.action.MAIN" />-->
@@ -43,8 +43,8 @@
             <!--</intent-filter>-->
         </activity>
         <activity
-            android:name=".AboutActivity"
-            android:parentActivityName=".HomeActivity">
+            android:name="com.example.gamecenter.AboutActivity"
+            android:parentActivityName="com.example.gamecenter.HomeActivity">
             <!--<intent-filter>-->
                 <!--<action android:name="android.intent.action.MAIN" />-->
 
@@ -52,7 +52,7 @@
             <!--</intent-filter>-->
         </activity>
         <activity
-            android:name=".GamesActivity"
+            android:name="com.example.gamecenter.GamesActivity"
             android:theme="@style/AppTheme.NoActionBar" >
             <!--<intent-filter>-->
                 <!--<action android:name="android.intent.action.MAIN" />-->
@@ -61,8 +61,8 @@
             <!--</intent-filter>-->
         </activity>
         <activity
-            android:name=".GameDetailActivity"
-            android:parentActivityName=".GamesActivity">
+            android:name="com.example.gamecenter.GameDetailActivity"
+            android:parentActivityName="com.example.gamecenter.GamesActivity">
             <!--<intent-filter>-->
                 <!--<action android:name="android.intent.action.MAIN" />-->
 
@@ -70,8 +70,8 @@
             <!--</intent-filter>-->
         </activity>
         <activity
-            android:name=".PaymentActivity"
-            android:parentActivityName=".GameDetailActivity">
+            android:name="com.example.gamecenter.PaymentActivity"
+            android:parentActivityName="com.example.gamecenter.GameDetailActivity">
             <!--<intent-filter>-->
                 <!--<action android:name="android.intent.action.MAIN" />-->
 

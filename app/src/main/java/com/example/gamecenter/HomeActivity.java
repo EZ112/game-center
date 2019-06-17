@@ -1,11 +1,10 @@
-package com.example.gamecenterasg;
+package com.example.gamecenter;
 
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,11 +16,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.gamecenterasg.Adapter.MyGamesAdapter;
-import com.example.gamecenterasg.Model.MyGames;
-import com.example.gamecenterasg.Model.Users;
+import com.example.gamecenter.Adapter.MyGamesAdapter;
+import com.example.gamecenter.Model.MyGames;
+import com.example.gamecenter.Model.Users;
+import com.example.gamecenter.R;
 
 import java.util.ArrayList;
 

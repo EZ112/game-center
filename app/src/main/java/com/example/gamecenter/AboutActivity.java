@@ -1,4 +1,4 @@
-package com.example.gamecenterasg;
+package com.example.gamecenter;
 
 import android.graphics.Typeface;
 import android.support.v7.app.ActionBar;
@@ -8,6 +8,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.widget.TextView;
 
+import com.example.gamecenter.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;

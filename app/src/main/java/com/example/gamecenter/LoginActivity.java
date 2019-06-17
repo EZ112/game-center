@@ -1,13 +1,14 @@
-package com.example.gamecenterasg;
+package com.example.gamecenter;
 
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.gamecenter.R;
 
 
 public class LoginActivity extends AppCompatActivity {

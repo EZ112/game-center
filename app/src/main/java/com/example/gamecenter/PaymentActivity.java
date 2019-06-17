@@ -1,4 +1,4 @@
-package com.example.gamecenterasg;
+package com.example.gamecenter;
 
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -10,7 +10,6 @@ import android.text.Selection;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -18,8 +17,9 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.gamecenterasg.Model.Games;
-import com.example.gamecenterasg.Model.Users;
+import com.example.gamecenter.Model.Games;
+import com.example.gamecenter.Model.Users;
+import com.example.gamecenter.R;
 
 import java.text.NumberFormat;
 import java.util.Locale;

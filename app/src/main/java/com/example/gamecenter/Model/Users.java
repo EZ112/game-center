@@ -1,4 +1,4 @@
-package com.example.gamecenterasg.Model;
+package com.example.gamecenter.Model;
 
 import java.io.Serializable;
 
