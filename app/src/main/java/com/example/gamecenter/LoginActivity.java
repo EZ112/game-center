@@ -1,7 +1,11 @@
 package com.example.gamecenter;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +17,7 @@ import com.example.gamecenter.R;
 
 public class LoginActivity extends AppCompatActivity {
 
+    final int MY_PERMISSION_REQUEST_SEND_SMS = 1;
     DatabaseHelper gameCenterDB;
     TextView appName, emailIn, passIn, loginBtn, regText, regLink;
 
@@ -40,6 +45,9 @@ public class LoginActivity extends AppCompatActivity {
         emailIn.setTypeface(robotoLight);
         passIn.setTypeface(robotoLight);
         loginBtn.setTypeface(robotoLight);
+
+        if(ContextCompat.checkSelfPermission(LoginActivity.this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(LoginActivity.this, new String[]{Manifest.permission.SEND_SMS}, MY_PERMISSION_REQUEST_SEND_SMS);
 
 
         loginBtn.setOnClickListener(new View.OnClickListener() {

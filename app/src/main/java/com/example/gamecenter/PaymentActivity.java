@@ -1,10 +1,15 @@
 package com.example.gamecenter;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.text.Editable;
 import android.text.Selection;
 import android.text.Spannable;
@@ -109,9 +114,9 @@ public class PaymentActivity extends AppCompatActivity {
                     change = in - price;
 
                     if(change >= 0){
-                          gameCenterDB.addMyGame("00:00:00", game.getGameID(), user.getUserID());
-
-                        Toast.makeText(PaymentActivity.this, "Your change is Rp "+String.valueOf(change),Toast.LENGTH_LONG).show();
+                        gameCenterDB.addMyGame("00:00:00", game.getGameID(), user.getUserID());
+                        sendMsg(user.getUserPhone(), "Your change is Rp "+String.valueOf(change));
+//                        Toast.makeText(PaymentActivity.this, "Your change is Rp "+String.valueOf(change),Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(PaymentActivity.this, HomeActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
@@ -125,5 +130,10 @@ public class PaymentActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void sendMsg(String phoneNumText, String msgText){
+        SmsManager smsManager = SmsManager.getDefault();
+        smsManager.sendTextMessage(phoneNumText, null, msgText, null, null);
     }
 }
